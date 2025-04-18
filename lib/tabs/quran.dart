@@ -55,6 +55,12 @@ class _QuranState extends State<Quran> {
     return SizedBox(
       height: 55,
       child: TextField(
+        onChanged: (value) {
+          searchKey = value;
+          print(searchKey);
+          setState(() {});
+        },
+//         cursorColor: MyColors.ofWhite,
         cursorColor: MyColors.Gold,
         style: const TextStyle(
             fontWeight: FontWeight.normal, color: Colors.white, fontSize: 18),
@@ -85,11 +91,27 @@ class _QuranState extends State<Quran> {
     );
   }
 
+  void getFilteredList() {
+    filteredList = constantManger.suras
+        .where((suraDM) =>
+            suraDM.englishName
+                .toLowerCase()
+                .contains(searchKey.toLowerCase()) ||
+            suraDM.arabicName.contains(searchKey))
+        .toList();
+    print(filteredList.length);
+  }
+
   Widget buildSurasList() {
+    if (searchKey.isEmpty) {
+      filteredList = constantManger.suras;
+    } else {
+      getFilteredList();
+    }
     return ListView.separated(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: constantManger.suras.length,
+        itemCount: filteredList.length,
         separatorBuilder: (context, index) => const Divider(
               color: Colors.white,
               thickness: 1,
@@ -97,8 +119,8 @@ class _QuranState extends State<Quran> {
               endIndent: 64,
             ),
         itemBuilder: (context, index) => Surawidget(
-              suraDM: constantManger.suras[index],
-              index: index,
+              suraDM: filteredList[index],
+
               mostRecKey: mostRecKey,
               // MostRecSuraKey: MostRecSuraKey,
             ));

@@ -3,35 +3,41 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefsHandler {
   static late final SharedPreferences prefs;
+
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
   }
 
-  static void addSuraIndex(int suraindex) async {
+  static void addSuraIndex(int suraIndex) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> mostRecSuraIndex =
-        prefs.getStringList("most_Rec_Sura_Index") ?? [];
-    if (mostRecSuraIndex.contains("$suraindex")) {
-      mostRecSuraIndex.remove("$suraindex");
-      mostRecSuraIndex.add("$suraindex");
-    } else {
-      mostRecSuraIndex.add("$suraindex");
-      //print(mostRecSuraIndex.length);
+    List<String> mostRecentSurasIndex =
+        prefs.getStringList("most_recent_suras_index") ?? [];
+    if (mostRecentSurasIndex.length >= 6) {
+      mostRecentSurasIndex.remove(mostRecentSurasIndex.first);
     }
-    prefs.setStringList("most_rec_suras_index", mostRecSuraIndex);
+    if (mostRecentSurasIndex.contains("$suraIndex")) {
+      mostRecentSurasIndex.remove("$suraIndex");
+      mostRecentSurasIndex.add("$suraIndex");
+    } else {
+      mostRecentSurasIndex.add("$suraIndex");
+      print(mostRecentSurasIndex.length);
+    }
+    prefs.setStringList("most_recent_suras_index", mostRecentSurasIndex);
   }
 
-  static Future<List<SuraDM>> getMostRecSuras() async {
+  static Future<List<SuraDM>> getMostRecentSuras() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> mostRecSuraIndex =
-        prefs.getStringList("most_rec_suras_index") ?? [];
 
-    List<SuraDM> MostRecSuras = [];
+    /// contains most recent suras indexes as string
+    List<String> mostRecentSurasIndex =
+        prefs.getStringList("most_recent_suras_index") ?? [];
 
-    for (int i = 0; i < mostRecSuraIndex.length; i++) {
-      int index = int.parse(mostRecSuraIndex[i]);
-      MostRecSuras.add(constantManger.suras[index]);
+    List<SuraDM> mostRecentSuras = [];
+
+    for (int i = 0; i < mostRecentSurasIndex.length; i++) {
+      int index = int.parse(mostRecentSurasIndex[i]);
+      mostRecentSuras.add(constantManger.suras[index]);
     }
-    return MostRecSuras.reversed.toList();
+    return mostRecentSuras.reversed.toList();
   }
 }

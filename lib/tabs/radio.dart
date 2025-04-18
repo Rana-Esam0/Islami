@@ -38,7 +38,6 @@ class _RadioTapState extends State<RadioTap> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                // زر Radio
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
@@ -60,9 +59,7 @@ class _RadioTapState extends State<RadioTap> {
                     ),
                   ),
                 ),
-
                 SizedBox(width: 5),
-
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(

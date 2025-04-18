@@ -8,13 +8,13 @@ import 'package:flutter_application_earth/tabs/QuranDetails.dart';
 
 class Surawidget extends StatelessWidget {
   final SuraDM suraDM;
-  final int index;
+  //final int index;
   final GlobalKey<MostRecState> mostRecKey;
 
   const Surawidget({
     super.key,
     required this.suraDM,
-    required this.index,
+    //required this.index,
     required this.mostRecKey,
     // required GlobalKey<MostRecState> mostRecKey,
   });
@@ -24,13 +24,14 @@ class Surawidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         PrefsHandler.addSuraIndex(int.parse(suraDM.suraIndex));
+
         Navigator.pushNamed(context, Approutes.quranDetails,
             arguments: suraDetailesArguments(
                 mostRecKey: mostRecKey,
                 englishName: suraDM.englishName,
                 arabicName: suraDM.arabicName,
                 ayaNumber: suraDM.ayaNumber,
-                suraIndex: index));
+                suraIndex: suraDM.suraIndex));
       },
       child: Row(
         children: [
@@ -39,7 +40,7 @@ class Surawidget extends StatelessWidget {
             children: [
               Image.asset("assets/images/suraNum.png"),
               Text(
-                "${index + 1}",
+                suraDM.suraIndex,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -84,13 +85,13 @@ class suraDetailesArguments {
   String englishName;
   String arabicName;
   String ayaNumber;
-  int suraIndex;
-  final GlobalKey<MostRecState> mostRecKey;
+  String suraIndex;
+  final GlobalKey<MostRecState>? mostRecKey;
 
   suraDetailesArguments(
       {required this.arabicName,
       required this.englishName,
       required this.ayaNumber,
       required this.suraIndex,
-      required this.mostRecKey});
+      this.mostRecKey});
 }

@@ -19,7 +19,7 @@ class _QuranDetailsState extends State<QuranDetails> {
     super.didChangeDependencies();
     arguments =
         ModalRoute.of(context)!.settings.arguments as suraDetailesArguments;
-    loadSuraContent(arguments.suraIndex + 1);
+    loadSuraContent(arguments.suraIndex);
   }
 
   @override
@@ -27,7 +27,7 @@ class _QuranDetailsState extends State<QuranDetails> {
     // TODO: implement dispose
     super.dispose();
     //arguments.MostRecKey.currentState?.getMostRecSuras;
-    arguments.mostRecKey.currentState?.getMostRecSuras();
+    arguments.mostRecKey?.currentState?.getMostRecSuras();
   }
 
   @override
@@ -84,7 +84,7 @@ class _QuranDetailsState extends State<QuranDetails> {
         ));
   }
 
-  void loadSuraContent(int suraIndex) async {
+  void loadSuraContent(String suraIndex) async {
     String fileContent =
         await rootBundle.loadString("assets/files/suras/$suraIndex.txt");
     var suraLines = fileContent.trim().split("\n");
@@ -95,7 +95,9 @@ class _QuranDetailsState extends State<QuranDetails> {
       line += "[${i + 1}]";
       suraLinesFinal.add(line);
     }
-    suraContent = suraLinesFinal.join();
-    setState(() {});
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      suraContent = suraLinesFinal.join();
+    });
   }
 }
